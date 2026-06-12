@@ -52,7 +52,7 @@
   .scroller-label{font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:var(--txt-dim);margin:26px 4px 12px;font-weight:700}
 
   /* ---------- cuisine scroller ---------- */
-  .cuisine-scroller{display:flex;gap:12px;overflow-x:auto;padding:4px 4px 12px;scrollbar-width:none}
+  .cuisine-scroller{display:flex;gap:12px;overflow-x:auto;padding:4px 4px 12px;scrollbar-width:none;justify-content:center}
   .cuisine-scroller::-webkit-scrollbar{display:none}
   .cuisine-tile{flex:0 0 84px;text-align:center;cursor:pointer;background:none;border:none;color:var(--txt);font-family:inherit;transition:opacity .2s ease}
   .cuisine-tile .ring{
@@ -74,7 +74,7 @@
   .cuisine-tile:focus-visible .ring{outline:2px solid var(--blue);outline-offset:3px}
 
   /* ---------- vibe strip ---------- */
-  .vibe-strip{display:flex;gap:12px;overflow-x:auto;padding:2px 4px 12px;scrollbar-width:none}
+  .vibe-strip{display:flex;gap:12px;overflow-x:auto;padding:2px 4px 12px;scrollbar-width:none;justify-content:center}
   .vibe-strip::-webkit-scrollbar{display:none}
   .vibe{flex:0 0 230px;height:140px;border-radius:18px;overflow:hidden;position:relative;display:flex;align-items:flex-end;box-shadow:0 8px 20px rgba(0,0,0,.3)}
   .vibe img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -182,6 +182,11 @@
   .count{color:var(--txt-dim);font-size:.86rem;font-variant-numeric:tabular-nums}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px}
   .grid .dish-card{width:100%;box-shadow:0 8px 20px rgba(0,0,0,.28);animation:fadeUp .45s ease both;animation-delay:var(--d,0s)}
+
+  .more-wrap{grid-column:1/-1;display:flex;justify-content:center;margin-top:8px}
+  .more-btn{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:.98rem;cursor:pointer;background:linear-gradient(135deg,#ffb13d,#ff7a22);color:#fff;border:none;border-radius:999px;padding:13px 28px;box-shadow:0 8px 20px rgba(255,122,34,.26);transition:transform .15s ease}
+  .more-btn:hover{transform:translateY(-2px)}
+  .more-btn:active{transform:scale(.96)}
   @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
   .empty{
     grid-column:1/-1;color:var(--txt-dim);padding:26px 20px;
@@ -226,26 +231,28 @@
   .section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:24px 4px 12px}
   .section-head .scroller-label{margin:0}
   .mini-copy{color:var(--txt-dim);font-size:.78rem;text-align:end}
-  .deal-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:8px 4px 12px;margin-bottom:2px}
+  .deal-strip{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding:8px 4px 12px;margin-bottom:2px;justify-content:center}
   .deal-strip::-webkit-scrollbar{display:none}
   .deal-pill{flex:0 0 auto;background:linear-gradient(135deg,rgba(74,157,255,.18),rgba(255,255,255,.06));border:1px solid var(--navy-3);border-radius:999px;padding:9px 14px;color:#d9e8ff;font-size:.82rem;font-weight:700;display:flex;gap:7px;align-items:center}
   .deal-pill em{font-style:normal;color:var(--blue)}
 
   /* ---------- casino spin machine ---------- */
   .spin-zone{position:relative;overflow:hidden;padding:26px 22px 24px;background:
-    radial-gradient(circle at 50% 0%, rgba(74,157,255,.22), transparent 42%),
-    linear-gradient(180deg,#192f54,#132846);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 16px 40px rgba(0,0,0,.25)}
-  .spin-zone:before,.spin-zone:after{content:"";position:absolute;inset:auto;pointer-events:none;border-radius:50%;filter:blur(18px);opacity:.55}
-  .spin-zone:before{width:220px;height:220px;background:rgba(74,157,255,.18);left:-80px;top:-90px}
-  .spin-zone:after{width:180px;height:180px;background:rgba(255,93,125,.14);right:-70px;bottom:-90px}
+    radial-gradient(circle at 20% 10%, rgba(255,255,255,.22), transparent 28%),
+    radial-gradient(circle at 84% 100%, rgba(255,93,44,.32), transparent 38%),
+    linear-gradient(135deg,#ffb13d 0%,#ff7a22 42%,#f04f1a 100%);
+    border-color:rgba(255,255,255,.18);box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 18px 48px rgba(240,79,26,.28)}
+  .spin-zone:before,.spin-zone:after{content:"";position:absolute;inset:auto;pointer-events:none;border-radius:50%;filter:blur(20px);opacity:.7}
+  .spin-zone:before{width:260px;height:260px;background:rgba(255,255,255,.2);left:-90px;top:-100px}
+  .spin-zone:after{width:220px;height:220px;background:rgba(255,210,138,.34);right:-80px;bottom:-100px}
   .spin-title{position:relative;z-index:1;font-family:'Bricolage Grotesque',sans-serif;font-size:1.45rem;font-weight:800;letter-spacing:-.02em;margin-bottom:4px;color:#fff}
-  .spin-sub{position:relative;z-index:1;color:var(--txt-dim);font-size:.88rem;margin-bottom:16px}
+  .spin-sub{position:relative;z-index:1;color:rgba(255,255,255,.82);font-size:.88rem;margin-bottom:16px}
   .machine{position:relative;z-index:1;margin:0 auto;max-width:570px;border-radius:26px;padding:16px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.1);box-shadow:0 20px 42px rgba(0,0,0,.22)}
   .slot-window{position:relative;min-height:188px;border-radius:22px;background:#07182e;border:1px solid rgba(255,255,255,.08);overflow:hidden;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(74,157,255,.12), inset 0 26px 40px rgba(0,0,0,.35)}
   .slot-window:before,.slot-window:after{content:"";position:absolute;left:0;right:0;height:46px;z-index:3;pointer-events:none}
   .slot-window:before{top:0;background:linear-gradient(to bottom,#07182e,transparent)}
   .slot-window:after{bottom:0;background:linear-gradient(to top,#07182e,transparent)}
-  .slot-line{position:absolute;left:18px;right:18px;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--blue),transparent);z-index:4;opacity:.7;box-shadow:0 0 16px rgba(74,157,255,.8)}
+  .slot-line{display:none}
   .slot-reel{width:min(430px,100%);height:152px;position:relative;z-index:2;display:flex;align-items:center;justify-content:center}
   .slot-item{width:100%;min-height:106px;background:#fff;color:var(--ink);border-radius:18px;display:grid;grid-template-columns:82px 1fr auto;gap:13px;align-items:center;padding:12px;box-shadow:0 10px 24px rgba(0,0,0,.28)}
   .slot-thumb{width:82px;height:82px;border-radius:16px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:2rem}
@@ -255,13 +262,68 @@
   @keyframes slotFlash{from{transform:translateY(-28px) rotateX(25deg);opacity:.15;filter:blur(3px)}to{transform:none;opacity:1;filter:blur(0)}}
   @keyframes winPop{0%{transform:scale(.88);opacity:.4}55%{transform:scale(1.04);opacity:1}100%{transform:scale(1)}}
   .confetti{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}.confetti i{position:absolute;top:-10px;width:7px;height:13px;background:var(--blue);border-radius:2px;animation:fall 850ms ease-in forwards;opacity:.95}.confetti i:nth-child(3n){background:#ff5d7d}.confetti i:nth-child(4n){background:#ffd28a}.confetti i:nth-child(5n){background:#3ecf8e}@keyframes fall{to{transform:translateY(245px) rotate(500deg);opacity:0}}
-  .spin-actions{position:relative;z-index:1;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:16px}.surprise-chip{border:1px solid var(--navy-3);background:rgba(255,255,255,.06);color:var(--txt-dim);border-radius:999px;padding:10px 14px;font-family:inherit;font-weight:700;cursor:pointer}.surprise-chip:hover{border-color:var(--blue);color:#fff}
-  .spin-btn{margin-top:0;min-width:205px}.reel{min-height:auto;display:block;perspective:none}.reel .dish-card{display:none}
+  .spin-actions{position:relative;z-index:1;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:16px}.surprise-chip{border:1px solid rgba(255,255,255,.28);background:rgba(14,31,56,.26);color:rgba(255,255,255,.86);border-radius:999px;padding:10px 14px;font-family:inherit;font-weight:700;cursor:pointer}.surprise-chip:hover{border-color:#fff;color:#fff;background:rgba(14,31,56,.38)}
+  .spin-btn{margin-top:0;min-width:205px;background:#fff;color:#f05a1a;box-shadow:0 8px 0 rgba(142,55,0,.28)}.reel{min-height:auto;display:block;perspective:none}.reel .dish-card{display:none}
   .spin-result{position:relative;z-index:1;margin:14px auto 0;max-width:430px;display:none}.spin-result.show{display:block;animation:fadeUp .35s ease both}.spin-result .dish-card{width:100%}
   .quick-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0 0}.quick-stat{background:rgba(255,255,255,.05);border:1px solid var(--navy-3);border-radius:16px;padding:12px;text-align:center}.quick-stat b{display:block;color:#fff;font-size:1.15rem;font-family:'Bricolage Grotesque',sans-serif}.quick-stat span{color:var(--txt-dim);font-size:.73rem}
 
+
+  @media (max-width:760px){.cuisine-scroller,.vibe-strip,.deal-strip{justify-content:flex-start}}
   @media (max-width:760px){.value-row{grid-template-columns:repeat(2,1fr)}.slot-item{grid-template-columns:70px 1fr;}.slot-price{grid-column:2;justify-self:start}.slot-thumb{width:70px;height:70px}.quick-stats{grid-template-columns:1fr 1fr 1fr}}
   @media (max-width:560px){.value-card{min-height:104px}.mini-copy{display:none}.machine{padding:10px}.slot-window{min-height:178px}.spin-title{font-size:1.25rem}}
+
+
+  /* ---------- orange roulette contrast polish ---------- */
+  .spin-zone{
+    background:
+      radial-gradient(circle at 18% 8%, rgba(255,255,255,.32), transparent 30%),
+      radial-gradient(circle at 86% 96%, rgba(255,202,87,.38), transparent 36%),
+      linear-gradient(135deg,#ff7a00 0%,#ff9500 52%,#ffb347 100%);
+    border-color:rgba(8,21,38,.16);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 22px 54px rgba(255,122,0,.28);
+  }
+  .spin-zone:before{background:rgba(255,255,255,.28)}
+  .spin-zone:after{background:rgba(8,21,38,.14)}
+  .spin-title{color:#081526;text-shadow:none}
+  .spin-sub{color:rgba(8,21,38,.74)}
+  .machine{
+    background:rgba(255,255,255,.20);
+    border:1px solid rgba(8,21,38,.14);
+    box-shadow:0 22px 42px rgba(8,21,38,.18), inset 0 1px 0 rgba(255,255,255,.28);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+  .slot-window{
+    background:#081526;
+    border-color:rgba(8,21,38,.24);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.08), inset 0 26px 40px rgba(0,0,0,.38);
+  }
+  .slot-window:before{background:linear-gradient(to bottom,#081526,transparent)}
+  .slot-window:after{background:linear-gradient(to top,#081526,transparent)}
+  .spin-actions .spin-btn{
+    background:#081526;
+    color:#fff;
+    box-shadow:0 8px 0 rgba(0,0,0,.32), 0 14px 28px rgba(8,21,38,.24);
+  }
+  .spin-actions .spin-btn:hover{box-shadow:0 10px 0 rgba(0,0,0,.32), 0 16px 30px rgba(8,21,38,.28)}
+  .surprise-chip{
+    background:rgba(8,21,38,.16);
+    border-color:rgba(8,21,38,.22);
+    color:#081526;
+  }
+  .surprise-chip:hover{background:rgba(8,21,38,.25);border-color:#081526;color:#081526}
+  .quick-stat{
+    background:rgba(255,255,255,.22);
+    border:1px solid rgba(8,21,38,.14);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+  .quick-stat b{color:#081526}
+  .quick-stat span{color:rgba(8,21,38,.72)}
+  .spin-hint{color:rgba(8,21,38,.74);font-weight:700}
+  .spin-hint.note{color:#081526}
+  .slot-info b{color:#0b5fd7}
+  .slot-price{background:#e8f1ff;color:#0b5fd7}
 
 </style>
 </head>
@@ -341,7 +403,7 @@
     </div>
     <div class="spin-actions">
       <button class="surprise-chip" id="quickAll">✨ Surprise me anywhere</button>
-      <button class="spin-btn" id="spinBtn">🎲 SPIN THE ROULETTE</button>
+      <button class="spin-btn" id="spinBtn">🎰 FEED ME UNDER 40</button>
       <button class="surprise-chip" id="quickCheap">💸 Cheapest luck</button>
     </div>
     <div class="spin-hint" id="spinHint">Spins within your search + filters</div>
@@ -520,7 +582,7 @@ DISHES.forEach((d,i)=>d.id=i);
 /* ---------- state ---------- */
 const cuisines = ["All", ...new Set(DISHES.map(d=>d.cuisine))];
 const areas = ["All", ...new Set(DISHES.map(d=>d.area))].sort((a,b)=>a==="All"?-1:b==="All"?1:a.localeCompare(b));
-let activeCuisine="All", activeArea="All", query="", showSavedOnly=false, spinning=false;
+let activeCuisine="All", activeArea="All", query="", showSavedOnly=false, spinning=false, browseExpanded=false;
 
 let favs = new Set();
 try{ favs = new Set(JSON.parse(localStorage.getItem("u40favs")||"[]")); }catch(e){}
@@ -635,7 +697,7 @@ function renderCuisines(){
     b.setAttribute("aria-pressed",String(c===activeCuisine));
     const imgTag=(c!=="All"&&IMAGES.cuisine[c])?`<img src="${IMAGES.cuisine[c]}" alt="" loading="lazy" onerror="this.remove()">`:"";
     b.innerHTML=`<div class="ring ${meta.grad}">${meta.emoji}${imgTag}<span class="cnt">${n}</span></div><span class="lbl">${c}</span>`;
-    b.onclick=()=>{ activeCuisine=c; renderAll(); };
+    b.onclick=()=>{ activeCuisine=c; browseExpanded=false; renderAll(); };
     el.appendChild(b);
   });
 }
@@ -650,7 +712,7 @@ function renderAreas(){
     b.innerHTML=(a==="All"?"All areas":a)+`<span class="c">${n}</span>`;
     b.setAttribute("aria-pressed",String(a===activeArea));
     if(n===0&&a!==activeArea) b.disabled=true;
-    b.onclick=()=>{ activeArea=a; renderAll(); };
+    b.onclick=()=>{ activeArea=a; browseExpanded=false; renderAll(); };
     el.appendChild(b);
   });
 }
@@ -661,7 +723,11 @@ function renderGrid(){
   animateCount(list.length);
   const grid=$("grid");
   if(list.length){
-    grid.innerHTML=list.map((d,i)=>cardHTML(d,Math.min(i,12)*40)).join("");
+    const visible = browseExpanded ? list : list.slice(0,9);
+    const more = (!browseExpanded && list.length>9)
+      ? `<div class="more-wrap"><button class="more-btn" onclick="showMoreDishes()">Show more picks (${list.length-9})</button></div>`
+      : "";
+    grid.innerHTML=visible.map((d,i)=>cardHTML(d,Math.min(i,12)*40)).join("") + more;
     return;
   }
   // empty → suggest: same cuisine elsewhere, or relax filters
@@ -684,8 +750,9 @@ function renderGrid(){
     </div>
     ${nearby.length?`<div class="nearby-label">${label}</div>`+nearby.slice(0,3).map((d,i)=>cardHTML(d,i*60)).join(""):""}`;
 }
-function setArea(a){ activeArea=a; renderAll(); }
-function resetFilters(){ activeCuisine="All"; activeArea="All"; query=""; $("searchInput").value=""; $("searchWrap").classList.remove("has-text"); showSavedOnly=false; $("savedToggle").setAttribute("aria-pressed","false"); renderAll(); }
+function showMoreDishes(){ browseExpanded=true; renderGrid(); }
+function setArea(a){ activeArea=a; browseExpanded=false; renderAll(); }
+function resetFilters(){ browseExpanded=false; activeCuisine="All"; activeArea="All"; query=""; $("searchInput").value=""; $("searchWrap").classList.remove("has-text"); showSavedOnly=false; $("savedToggle").setAttribute("aria-pressed","false"); renderAll(); }
 
 /* ---------- spin (auto-widens, tells you) ---------- */
 function pickPool({all=false, cheap=false}={}){
@@ -752,6 +819,7 @@ document.querySelectorAll(".nav-btn").forEach(b=>{
 });
 $("savedToggle").onclick=()=>{
   showSavedOnly=!showSavedOnly;
+  browseExpanded=false;
   $("savedToggle").setAttribute("aria-pressed",String(showSavedOnly));
   renderGrid();
 };
@@ -760,12 +828,13 @@ $("searchInput").addEventListener("input",e=>{
   clearTimeout(searchTimer);
   searchTimer=setTimeout(()=>{
     query=e.target.value;
+    browseExpanded=false;
     $("searchWrap").classList.toggle("has-text",query.length>0);
     renderAreas(); renderGrid();
   },120);
 });
 $("searchClear").onclick=()=>{
-  query=""; $("searchInput").value="";
+  query=""; browseExpanded=false; $("searchInput").value="";
   $("searchWrap").classList.remove("has-text");
   renderAreas(); renderGrid(); $("searchInput").focus();
 };

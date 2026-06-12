@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0e1f38">
+<title>Under 40 DXB — Great food, small bills</title>
+<meta name="description" content="Discover Dubai's best meals under AED 40. Pick a cuisine, hit spin, eat well.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0e1f38; --navy-2:#16294a; --navy-3:#1e3560;
+    --card:#ffffff; --blue:#4a9dff; --blue-deep:#2f7be0; --blue-soft:#e8f1ff;
+    --ink:#13233f; --ink-dim:#5b6b85;
+    --txt:#eef3fb; --txt-dim:#8fa3c2; --rose:#ff5d7d;
+    --radius:20px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  .ic{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-0.13em;display:inline-block}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Space Grotesk',sans-serif;background:var(--navy);color:var(--txt);min-height:100vh;
+    background-image:
+      radial-gradient(ellipse 70% 40% at 80% -5%, #234a85 0%, transparent 60%),
+      radial-gradient(ellipse 50% 35% at 5% 100%, #17335e 0%, transparent 60%);
+  }
+  .wrap{max-width:1020px;margin:0 auto;padding:0 18px 60px}
+
+  /* ---------- app bar ---------- */
+  .appbar{display:flex;align-items:center;justify-content:space-between;padding:20px 4px 6px}
+  .logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-.02em}
+  .logo .badge{display:inline-block;background:var(--blue);color:#fff;border-radius:8px;padding:1px 9px;margin-inline-start:6px;transform:rotate(-3deg);font-size:.98rem}
+  .loc-pill{display:flex;align-items:center;gap:6px;font-size:.84rem;font-weight:500;background:var(--navy-2);border:1px solid var(--navy-3);border-radius:999px;padding:7px 14px;color:var(--txt-dim)}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;margin-top:14px;border-radius:24px;overflow:hidden;min-height:300px;display:flex;align-items:flex-end;background:linear-gradient(140deg,#16335f,#2f7be0)}
+  .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .hero .shade{position:absolute;inset:0;background:linear-gradient(to top, rgba(10,22,42,.93) 5%, rgba(10,22,42,.3) 55%, rgba(10,22,42,.12))}
+  .hero-content{position:relative;padding:26px 24px 22px;width:100%}
+  .hero h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2rem,6.5vw,3.3rem);line-height:1.05;letter-spacing:-.03em;color:#fff}
+  .hero h1 .price{color:var(--blue)}
+  .hero p{color:#c4d6ef;margin-top:8px;font-size:.98rem;max-width:460px}
+  .hero .live{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-size:.82rem;font-weight:700;color:#9fdcb8;background:rgba(20,40,30,.45);border-radius:999px;padding:5px 13px}
+  .hero .live .dot{width:7px;height:7px;border-radius:50%;background:#3ecf8e;animation:pulse 1.6s ease infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(62,207,142,.6)}60%{box-shadow:0 0 0 7px rgba(62,207,142,0)}}
+  .flag-strip{display:flex;height:4px;border-radius:4px;overflow:hidden;margin-top:14px;max-width:200px}
+  .flag-strip span{flex:1}
+  .flag-strip .r{background:#ce1126;flex:0 0 26%}.flag-strip .g{background:#009639}.flag-strip .w{background:#fff}.flag-strip .b{background:#222}
+
+  .scroller-label{font-size:.74rem;text-transform:uppercase;letter-spacing:.14em;color:var(--txt-dim);margin:26px 4px 12px;font-weight:700}
+
+  /* ---------- cuisine scroller ---------- */
+  .cuisine-scroller{display:flex;gap:12px;overflow-x:auto;padding:4px 4px 12px;scrollbar-width:none}
+  .cuisine-scroller::-webkit-scrollbar{display:none}
+  .cuisine-tile{flex:0 0 84px;text-align:center;cursor:pointer;background:none;border:none;color:var(--txt);font-family:inherit;transition:opacity .2s ease}
+  .cuisine-tile .ring{
+    width:70px;height:70px;margin:0 auto;border-radius:24px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;
+    background:var(--card);overflow:hidden;position:relative;box-shadow:0 6px 16px rgba(0,0,0,.3);
+    border:2.5px solid transparent;transition:transform .18s ease, border-color .18s ease;
+  }
+  .cuisine-tile .ring img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .cuisine-tile .cnt{
+    position:absolute;bottom:-4px;inset-inline-end:-4px;z-index:2;
+    background:var(--navy);border:2px solid var(--navy-3);color:var(--txt-dim);
+    font-size:.66rem;font-weight:700;border-radius:999px;min-width:24px;padding:1px 6px;
+  }
+  .cuisine-tile[aria-pressed="true"] .cnt{background:var(--blue);border-color:var(--blue);color:#fff}
+  .cuisine-tile:hover .ring{transform:translateY(-3px)}
+  .cuisine-tile span.lbl{display:block;margin-top:8px;font-size:.8rem;font-weight:500;color:var(--txt-dim)}
+  .cuisine-tile[aria-pressed="true"] .ring{border-color:var(--blue);box-shadow:0 0 0 4px rgba(74,157,255,.3)}
+  .cuisine-tile[aria-pressed="true"] span.lbl{color:var(--blue);font-weight:700}
+  .cuisine-tile:focus-visible .ring{outline:2px solid var(--blue);outline-offset:3px}
+
+  /* ---------- vibe strip ---------- */
+  .vibe-strip{display:flex;gap:12px;overflow-x:auto;padding:2px 4px 12px;scrollbar-width:none}
+  .vibe-strip::-webkit-scrollbar{display:none}
+  .vibe{flex:0 0 230px;height:140px;border-radius:18px;overflow:hidden;position:relative;display:flex;align-items:flex-end;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+  .vibe img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .vibe .cap{position:relative;width:100%;padding:10px 14px;font-size:.84rem;font-weight:700;color:#fff;background:linear-gradient(to top, rgba(10,22,42,.85), transparent)}
+  .v1{background:linear-gradient(135deg,#2f7be0,#4a9dff)}.v2{background:linear-gradient(135deg,#1e8c6e,#3ecf8e)}.v3{background:linear-gradient(135deg,#16335f,#5b8def)}
+
+  /* ---------- spin zone ---------- */
+  .spin-zone{margin:24px 0 32px;padding:26px 20px;text-align:center;background:var(--navy-2);border:1px solid var(--navy-3);border-radius:24px}
+  .reel{min-height:340px;display:flex;align-items:center;justify-content:center;position:relative;perspective:900px}
+  .placeholder{color:var(--txt-dim);font-size:.96rem}
+  .placeholder .ic-big{width:42px;height:42px;margin-bottom:8px;stroke-width:1.6}
+  @keyframes slotIn{0%{transform:translateY(-110%) rotateX(30deg);opacity:0}60%{transform:translateY(7%) rotateX(-5deg);opacity:1}100%{transform:translateY(0) rotateX(0)}}
+  .spinning .dish-card{animation:slotIn .22s linear}
+  .landed .dish-card{animation:slotIn .55s cubic-bezier(.22,1.4,.36,1)}
+  .spin-btn{
+    margin-top:20px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.08rem;cursor:pointer;
+    background:var(--blue);color:#fff;border:none;border-radius:999px;padding:15px 44px;
+    box-shadow:0 8px 0 var(--blue-deep);transition:transform .1s ease, box-shadow .1s ease;
+  }
+  .spin-btn:hover{transform:translateY(-2px);box-shadow:0 10px 0 var(--blue-deep)}
+  .spin-btn:active{transform:translateY(5px);box-shadow:0 3px 0 var(--blue-deep)}
+  .spin-btn:disabled{opacity:.6;cursor:wait}
+  .spin-btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+  .spin-hint{margin-top:10px;font-size:.82rem;color:var(--txt-dim);min-height:1.4em;transition:color .25s ease}
+  .spin-hint.note{color:#ffd28a}
+
+  /* ---------- search & chips ---------- */
+  .search-wrap{margin:6px 0 14px;position:relative}
+  .search-input{
+    width:100%;font-family:inherit;font-size:1rem;color:var(--ink);background:var(--card);border:none;border-radius:999px;
+    padding:15px 52px 15px 48px;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:box-shadow .18s ease;
+  }
+  .search-input::placeholder{color:var(--ink-dim)}
+  .search-input:focus{outline:none;box-shadow:0 0 0 3px rgba(74,157,255,.5)}
+  .search-icon{position:absolute;inset-inline-start:18px;top:50%;transform:translateY(-50%);color:var(--ink-dim);pointer-events:none}
+  .search-clear{
+    position:absolute;inset-inline-end:10px;top:50%;transform:translateY(-50%);
+    background:var(--blue-soft);color:var(--ink);border:none;border-radius:999px;width:32px;height:32px;cursor:pointer;display:none;
+  }
+  .search-clear:hover{background:var(--blue);color:#fff}
+  .search-wrap.has-text .search-clear{display:block}
+
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+  .chip{
+    font-family:inherit;font-size:.86rem;font-weight:500;cursor:pointer;
+    background:var(--navy-2);color:var(--txt-dim);border:1px solid var(--navy-3);
+    border-radius:999px;padding:8px 14px;transition:all .18s ease;
+  }
+  .chip .c{font-size:.74rem;opacity:.75;margin-inline-start:4px}
+  .chip:hover{border-color:var(--blue);color:var(--txt);transform:translateY(-1px)}
+  .chip:active{transform:scale(.95)}
+  .chip[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
+  .chip[disabled]{opacity:.32;cursor:not-allowed;transform:none}
+  .chip:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+  /* ---------- dish cards ---------- */
+  .dish-card{
+    background:var(--card);color:var(--ink);border-radius:var(--radius);overflow:hidden;text-align:start;
+    width:min(400px,100%);box-shadow:0 14px 34px rgba(0,0,0,.35);will-change:transform,opacity;
+  }
+  .card-img{height:128px;position:relative;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+  .card-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .card-img .fav{
+    position:absolute;top:10px;inset-inline-end:10px;z-index:2;width:36px;height:36px;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.92);border:none;color:var(--ink);
+    box-shadow:0 3px 10px rgba(0,0,0,.25);transition:transform .15s ease;
+  }
+  .card-img .fav .ic{width:17px;height:17px}
+  .card-img .fav:hover{transform:scale(1.12)}
+  .card-img .fav:active{transform:scale(.88)}
+  .card-img .fav.on{background:var(--rose);color:#fff}
+  .card-img .fav.on .ic{fill:#fff}
+  #savedToggle[aria-pressed="true"] .ic{fill:#fff}
+  .card-body{padding:15px 17px 17px}
+  .card-body .top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .card-body h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.18rem;letter-spacing:-.01em;line-height:1.15;color:var(--ink)}
+  .price-tag{flex-shrink:0;background:var(--blue-soft);color:var(--blue-deep);font-weight:700;border-radius:10px;padding:5px 11px;font-size:.95rem}
+  .resto{margin-top:5px;font-weight:700;color:var(--blue-deep);font-size:.95rem}
+  .meta{margin-top:2px;font-size:.82rem;color:var(--ink-dim)}
+  .desc{margin-top:8px;font-size:.88rem;line-height:1.55;color:#42526b}
+  .links{display:flex;gap:8px;margin-top:13px}
+  .links a{flex:1;text-align:center;text-decoration:none;font-weight:700;font-size:.86rem;border-radius:12px;padding:10px 0;transition:transform .15s ease}
+  .links a:hover{transform:translateY(-2px)}
+  .links a:active{transform:scale(.96)}
+  .lnk-maps{background:#f1f4f9;color:var(--ink)}
+  .lnk-order{background:var(--blue);color:#fff}
+  .apps{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+  .apps a{font-size:.74rem;font-weight:700;text-decoration:none;background:#f1f4f9;color:var(--ink-dim);border-radius:999px;padding:5px 11px;transition:all .15s ease}
+  .apps a:hover{background:var(--blue-soft);color:var(--blue-deep)}
+  .apps a:active{transform:scale(.95)}
+  .apps a.exact{background:var(--blue-soft);color:var(--blue-deep)}
+  .apps a.exact::after{content:" ✓"}
+
+  .g-persian{background:linear-gradient(135deg,#7b2d26,#d98e04)}
+  .g-arabic{background:linear-gradient(135deg,#1e6e3c,#a3c14a)}
+  .g-turkish{background:linear-gradient(135deg,#a32626,#e0593c)}
+  .g-asian{background:linear-gradient(135deg,#1e3c8c,#3ecfb0)}
+  .g-indian{background:linear-gradient(135deg,#b34c1e,#f5c623)}
+  .g-street{background:linear-gradient(135deg,#3a56c4,#7a9dff)}
+
+  /* ---------- browse grid ---------- */
+  .browse-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .browse-head h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:1.35rem;letter-spacing:-.02em}
+  .browse-head .side{display:flex;align-items:center;gap:10px}
+  .count{color:var(--txt-dim);font-size:.86rem;font-variant-numeric:tabular-nums}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px}
+  .grid .dish-card{width:100%;box-shadow:0 8px 20px rgba(0,0,0,.28);animation:fadeUp .45s ease both;animation-delay:var(--d,0s)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .empty{
+    grid-column:1/-1;color:var(--txt-dim);padding:26px 20px;
+    border:1.5px dashed var(--navy-3);border-radius:var(--radius);
+  }
+  .empty h4{color:var(--txt);font-size:1rem;margin-bottom:4px}
+  .empty .alts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .nearby-label{grid-column:1/-1;color:var(--txt-dim);font-size:.85rem;margin-top:6px}
+  .nearby-label b{color:var(--blue)}
+
+  footer{margin-top:50px;text-align:center;color:var(--txt-dim);font-size:.83rem;line-height:1.8}
+  footer a{color:var(--blue);text-decoration:none}
+
+  /* ---------- bottom nav ---------- */
+  .bottom-nav{
+    position:fixed;bottom:0;left:0;right:0;z-index:60;display:none;align-items:flex-end;justify-content:space-around;
+    background:rgba(14,31,56,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-top:1px solid var(--navy-3);padding:10px 20px calc(10px + env(safe-area-inset-bottom));
+  }
+  .nav-btn{background:none;border:none;color:var(--txt-dim);font-family:inherit;cursor:pointer;font-size:.7rem;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 14px}
+  .nav-btn .ico .ic{width:21px;height:21px}
+  .nav-btn.active{color:var(--blue)}
+  .nav-spin{
+    background:var(--blue);color:#fff;border:4px solid var(--navy);cursor:pointer;width:62px;height:62px;border-radius:50%;margin-top:-34px;
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:.78rem;
+    box-shadow:0 6px 18px rgba(74,157,255,.45);transition:transform .12s ease;
+  }
+  .nav-spin:active{transform:scale(.88)}
+  @media (max-width:760px){.bottom-nav{display:flex}.wrap{padding-bottom:140px}}
+  @media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+  @media (max-width:560px){.spin-zone{padding:20px 12px}.hero{min-height:250px}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-5.6-7-11a7 7 0 0 1 14 0c0 5.4-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M6 7h12l1.2 13H4.8L6 7z"/><path d="M9 10V6a3 3 0 0 1 6 0v4"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.7-9.3-9.2C1.4 8 3.6 4.9 6.9 4.9c2 0 3.6 1.1 4.4 2.7.8-1.6 2.4-2.7 4.4-2.7 3.3 0 5.5 3.1 4.2 6.4-1.8 4.5-9.3 9.2-9.3 9.2z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></symbol>
+    <symbol id="i-dice" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.4" fill="currentColor" stroke="none"/><circle cx="15.5" cy="8.5" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="8.5" cy="15.5" r="1.4" fill="currentColor" stroke="none"/><circle cx="15.5" cy="15.5" r="1.4" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"/></symbol>
+  </defs>
+</svg>
+<div class="wrap">
+
+  <header class="appbar" id="top">
+    <div class="logo">Under 40 <span class="badge">DXB</span></div>
+    <div class="loc-pill"><svg class="ic"><use href="#i-pin"/></svg> Dubai, UAE</div>
+  </header>
+
+  <section class="hero">
+    <img id="heroImg" alt="" loading="eager" onerror="this.remove()">
+    <div class="shade"></div>
+    <div class="hero-content">
+      <h1>Eat amazing.<br>Pay <span class="price">under AED 40</span>.</h1>
+      <p>Dubai's best budget bites — pick a cuisine, hit spin, go eat.</p>
+      <div class="live"><span class="dot"></span><span id="liveCount"></span></div>
+      <div class="flag-strip" aria-hidden="true"><span class="r"></span><span class="g"></span><span class="w"></span><span class="b"></span></div>
+    </div>
+  </section>
+
+  <div class="scroller-label">Pick a cuisine</div>
+  <div class="cuisine-scroller" id="cuisineScroller" role="group" aria-label="Choose cuisine"></div>
+
+  <div class="scroller-label">The vibe</div>
+  <div class="vibe-strip" aria-hidden="true">
+    <div class="vibe v1"><img data-img="vibe1" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><svg class="ic"><use href="#i-bag"/></svg> Delivered or dine-in</div></div>
+    <div class="vibe v2"><img data-img="vibe2" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><svg class="ic"><use href="#i-spark"/></svg> Good food, good mood</div></div>
+    <div class="vibe v3"><img data-img="vibe3" alt="" loading="lazy" onerror="this.remove()"><div class="cap"><svg class="ic"><use href="#i-pin"/></svg> Made in Dubai</div></div>
+  </div>
+
+  <section class="spin-zone" id="spinZone" aria-label="Random pick">
+    <div class="reel" id="reel" aria-live="polite">
+      <div class="placeholder"><svg class="ic ic-big"><use href="#i-dice"/></svg><br>Feeling lucky? Spin for a random pick.</div>
+    </div>
+    <button class="spin-btn" id="spinBtn">SPIN ME A MEAL</button>
+    <div class="spin-hint" id="spinHint">Spins within your search + filters</div>
+  </section>
+
+  <div class="search-wrap" id="searchWrap">
+    <span class="search-icon"><svg class="ic"><use href="#i-search"/></svg></span>
+    <input class="search-input" id="searchInput" type="search"
+           placeholder="Search a dish, restaurant or area…"
+           aria-label="Search dishes, restaurants and areas" autocomplete="off">
+    <button class="search-clear" id="searchClear" aria-label="Clear search"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="chips" id="areaChips" role="group" aria-label="Choose area"></div>
+
+  <section aria-label="Browse all" id="browse">
+    <div class="browse-head">
+      <h2>Browse the list</h2>
+      <div class="side">
+        <button class="chip" id="savedToggle" aria-pressed="false"><svg class="ic"><use href="#i-heart"/></svg> Saved</button>
+        <span class="count" id="count"></span>
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <footer>
+    Prices are approximate and change — always double-check.<br>
+    Photos via Unsplash. Know a hidden gem under 40? <a href="#" id="suggestLink">Suggest it</a> · Made in Dubai 🧡
+  </footer>
+</div>
+
+<nav class="bottom-nav" aria-label="Quick navigation">
+  <button class="nav-btn active" data-target="top"><span class="ico"><svg class="ic"><use href="#i-home"/></svg></span>Home</button>
+  <button class="nav-spin" id="navSpin" aria-label="Spin a meal">SPIN</button>
+  <button class="nav-btn" data-target="browse"><span class="ico"><svg class="ic"><use href="#i-grid"/></svg></span>Browse</button>
+</nav>
+
+<script>
+/* ===========================================================
+   CONFIG — set your Instagram URL to make "Suggest it" open DMs
+   =========================================================== */
+const CONFIG = { instagram: "" }; // e.g. "https://instagram.com/under40dxb"
+
+/* ===========================================================
+   IMAGES — verified Unsplash URLs; gradient fallback if broken
+   =========================================================== */
+const IMAGES = {
+  hero:  "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=1600&q=80",
+  vibe1: "https://images.unsplash.com/photo-1617347454431-f49d7ff5c3b1?w=600&q=80",
+  vibe2: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&q=80",
+  vibe3: "https://images.unsplash.com/photo-1651467606797-e1c660cf3fda?w=600&q=80",
+  cuisine: {
+    "Persian":     "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&q=80",
+    "Arabic":      "https://images.unsplash.com/photo-1662116765994-1e4200c43589?w=600&q=80",
+    "Turkish":     "https://images.unsplash.com/photo-1532636875304-0c89119d9b4d?w=600&q=80",
+    "Asian":       "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?w=600&q=80",
+    "Indian":      "https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=600&q=80",
+    "Street Food": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"
+  }
+};
+
+const CUISINE_META = {
+  "All":{emoji:"✨",grad:""},
+  "Persian":{emoji:"🍢",grad:"g-persian"},
+  "Arabic":{emoji:"🥙",grad:"g-arabic"},
+  "Turkish":{emoji:"🫓",grad:"g-turkish"},
+  "Asian":{emoji:"🍜",grad:"g-asian"},
+  "Indian":{emoji:"🍛",grad:"g-indian"},
+  "Street Food":{emoji:"🍔",grad:"g-street"}
+};
+
+const PROVIDERS = ["Talabat","Keeta","Careem","Smiles"];
+
+/* ===========================================================
+   DATA — ~80 dishes. Prices are approximate: VERIFY before launch.
+   Optional exact links per dish:
+   links:{talabat:"...",keeta:"...",careem:"...",smiles:"..."}
+   =========================================================== */
+const DISHES = [
+// ---- Persian ----
+{dish:"Chelo Kabab Koobideh",resto:"Al Ustad Special Kabab",cuisine:"Persian",area:"Bur Dubai",price:38,desc:"Legendary since 1978 — juicy koobideh, saffron rice, photo-covered walls."},
+{dish:"Joojeh Kabab (lunch)",resto:"Al Ustad Special Kabab",cuisine:"Persian",area:"Bur Dubai",price:36,desc:"Saffron-marinated chicken off the charcoal. Order the special yogurt drink."},
+{dish:"Zereshk Polo ba Morgh",resto:"Pars Iranian Kitchen",cuisine:"Persian",area:"Satwa",price:35,desc:"Barberry rice with slow-cooked chicken in a garden courtyard."},
+{dish:"Koobideh Wrap",resto:"Pars Iranian Kitchen",cuisine:"Persian",area:"Satwa",price:25,desc:"Kabab rolled in fresh lavash — the budget way to do Pars."},
+{dish:"Dizi (Abgoosht)",resto:"Sadaf Restaurant",cuisine:"Persian",area:"Al Rigga",price:30,desc:"Pound it, mash it, scoop with sangak. Old-school Tehran lunch."},
+{dish:"Ash Reshteh",resto:"Sadaf Restaurant",cuisine:"Persian",area:"Al Rigga",price:22,desc:"Thick herb-noodle soup with kashk and crispy onions."},
+{dish:"Kashk-e Bademjan",resto:"Abshar Restaurant",cuisine:"Persian",area:"Karama",price:24,desc:"Smoky eggplant dip rich with whey and fried mint — eats like a meal."},
+{dish:"Baghali Polo (lunch)",resto:"Abshar Restaurant",cuisine:"Persian",area:"Karama",price:38,desc:"Dill-fava rice with tender lamb shank flake-offs. Friday energy."},
+{dish:"Chelo Joojeh Express",resto:"Iran Zamin",cuisine:"Persian",area:"Al Barsha",price:32,desc:"Fast-casual saffron chicken plate near Mall of the Emirates."},
+{dish:"Mirza Ghasemi + Bread",resto:"Iran Zamin",cuisine:"Persian",area:"Al Barsha",price:26,desc:"Smoky northern eggplant-tomato-egg dip. Vegetarian gold."},
+{dish:"Halim Bademjan",resto:"Hatam Restaurant",cuisine:"Persian",area:"Deira",price:25,desc:"Velvety eggplant-lamb porridge topped with crispy onion and mint oil."},
+
+// ---- Arabic ----
+{dish:"Chicken Shawarma Plate",resto:"Al Mallah",cuisine:"Arabic",area:"Satwa",price:22,desc:"Neon-lit Satwa institution. Extra toum, fresh juice, done."},
+{dish:"Halloumi Manakish",resto:"Al Mallah",cuisine:"Arabic",area:"Satwa",price:16,desc:"Squeaky cheese on hot saj bread, mint and tomato inside."},
+{dish:"Mixed Grill Platter",resto:"Zaroob",cuisine:"Arabic",area:"Sheikh Zayed Rd",price:39,desc:"Levantine street-food vibes, manakish baked in front of you."},
+{dish:"Fattet Hummus",resto:"Zaroob",cuisine:"Arabic",area:"Sheikh Zayed Rd",price:28,desc:"Warm chickpeas, yogurt, crispy bread, pine nuts. Breakfast of champions."},
+{dish:"Falafel Mezze Box",resto:"Operation Falafel",cuisine:"Arabic",area:"JBR",price:30,desc:"Crispy falafel, hummus, pickles and saj — beach walk fuel."},
+{dish:"Shawarma Doqqa",resto:"Operation Falafel",cuisine:"Arabic",area:"JBR",price:24,desc:"Their signature spiced shawarma wrap with a crunch."},
+{dish:"Chicken Musakhan Roll",resto:"Allo Beirut",cuisine:"Arabic",area:"City Walk",price:27,desc:"Sumac chicken and caramelized onion rolled in markouk bread."},
+{dish:"Beirut Mezze Trio",resto:"Allo Beirut",cuisine:"Arabic",area:"City Walk",price:33,desc:"Hummus, moutabal and warak enab — built for sharing (or not)."},
+{dish:"Hummus Beiruty + Grill Skewer",resto:"Al Safadi",cuisine:"Arabic",area:"Al Rigga",price:36,desc:"The hummus benchmark of Dubai plus one perfect kebab skewer."},
+{dish:"Shish Tawook Sandwich",resto:"Aroos Damascus",cuisine:"Arabic",area:"Deira",price:18,desc:"Damascus-style garlic-heavy tawook from a Deira legend."},
+{dish:"Knafeh Nabulsiyeh",resto:"Qwaider Al Nabulsi",cuisine:"Arabic",area:"Deira",price:20,desc:"Molten cheese under crunchy semolina, syrup-soaked. Dessert as a meal."},
+{dish:"Lamb Mandi (small)",resto:"Bait Al Mandi",cuisine:"Arabic",area:"Al Nahda",price:36,desc:"Smoky, tender lamb over fragrant rice. Bring a friend, split it."},
+{dish:"Chicken Mandi (half)",resto:"Al Tawasol",cuisine:"Arabic",area:"Deira",price:28,desc:"Eat-on-the-floor majlis style. The real Yemeni experience."},
+{dish:"Falafel Sandwich x2",resto:"Sultan Dubai Falafel",cuisine:"Arabic",area:"Satwa",price:12,desc:"Maybe the best falafel-per-dirham ratio in the city."},
+{dish:"Zaatar & Cheese Saj",resto:"Manousheh Street",cuisine:"Arabic",area:"Jumeirah",price:19,desc:"Fresh saj folded hot, zaatar oil dripping. Morning ritual material."},
+
+// ---- Turkish ----
+{dish:"Adana Dürüm",resto:"Istanbul Flower",cuisine:"Turkish",area:"Al Rigga",price:30,desc:"Charcoal-grilled minced lamb wrapped with onions and sumac."},
+{dish:"Pide with Cheese & Egg",resto:"Istanbul Flower",cuisine:"Turkish",area:"Al Rigga",price:26,desc:"Boat-shaped bread fresh from the stone oven."},
+{dish:"Iskender (lunch portion)",resto:"Turkish Village",cuisine:"Turkish",area:"Al Jaddaf",price:39,desc:"Sliced döner over bread cubes, drowned in tomato butter and yogurt."},
+{dish:"Lahmacun x2 + Ayran",resto:"Turkish Village",cuisine:"Turkish",area:"Al Jaddaf",price:27,desc:"Thin crispy 'Turkish pizza' — squeeze lemon, roll, repeat."},
+{dish:"Chicken Döner Box",resto:"Döner & Gyros",cuisine:"Turkish",area:"JLT",price:25,desc:"Fast, loaded, consistent. The JLT office-lunch default."},
+{dish:"Döner Dürüm XL",resto:"Döner & Gyros",cuisine:"Turkish",area:"Al Barsha",price:28,desc:"Same cult döner, Barsha branch, extra garlic sauce."},
+{dish:"Sucuk Pide",resto:"Bosporus Express",cuisine:"Turkish",area:"Business Bay",price:34,desc:"Spicy Turkish sausage melted into cheese-boat bread."},
+{dish:"Köfte Plate",resto:"Bosporus Express",cuisine:"Turkish",area:"Business Bay",price:38,desc:"Grilled meatballs, bulgur, grilled pepper — Anatolian comfort."},
+{dish:"Simit + Çay Breakfast",resto:"Simit Sarayı",cuisine:"Turkish",area:"Deira",price:15,desc:"Sesame bread ring with cheese and endless Turkish tea."},
+{dish:"Gözleme (cheese-spinach)",resto:"Anatolia Corner",cuisine:"Turkish",area:"Karama",price:22,desc:"Hand-rolled village flatbread off the griddle."},
+
+// ---- Asian ----
+{dish:"Pad Krapow Gai",resto:"Sticky Rice",cuisine:"Asian",area:"Satwa",price:32,desc:"Holy-basil chicken with a runny fried egg. Ask for 'Thai spicy'."},
+{dish:"Tom Yum Goong",resto:"Sticky Rice",cuisine:"Asian",area:"Satwa",price:34,desc:"Hot-sour prawn soup that clears your sinuses and your worries."},
+{dish:"Khao Soi Chicken",resto:"Smiling BKK",cuisine:"Asian",area:"Al Quoz",price:36,desc:"Northern Thai curry noodles in a famously quirky room."},
+{dish:"Pad Thai Classic",resto:"Smiling BKK",cuisine:"Asian",area:"Al Quoz",price:33,desc:"Wok-charred noodles, peanuts, lime — the crowd-pleaser done right."},
+{dish:"Beef Pho",resto:"Vietnamese Foodies",cuisine:"Asian",area:"JLT",price:38,desc:"Clear 12-hour broth, rice noodles, a mountain of herbs."},
+{dish:"Banh Mi Saigon",resto:"Vietnamese Foodies",cuisine:"Asian",area:"JLT",price:29,desc:"Crackly baguette, pâté, pickled veg. Best sandwich in JLT."},
+{dish:"Dim Sum Set (6 pcs)",resto:"Wokyo Noodle Bar",cuisine:"Asian",area:"Sheikh Zayed Rd",price:28,desc:"Steamed-to-order dumplings plus chili oil you'll want to bottle."},
+{dish:"Build-Your-Box Noodles",resto:"Wokyo Noodle Bar",cuisine:"Asian",area:"Business Bay",price:35,desc:"Udon, protein, sauce, wok fire. Office-lunch hero."},
+{dish:"Hand-Pulled Lamian",resto:"China Sea",cuisine:"Asian",area:"Deira",price:26,desc:"Noodles pulled in front of you at this Deira institution."},
+{dish:"Salt & Pepper Shrimp",resto:"China Sea",cuisine:"Asian",area:"Deira",price:38,desc:"Crispy, garlicky, dangerously snackable."},
+{dish:"Kimchi Jjigae",resto:"Seoul Garden",cuisine:"Asian",area:"Deira",price:37,desc:"Bubbling kimchi stew with pork and tofu plus banchan refills."},
+{dish:"Chicken Adobo Meal",resto:"Tagpuan",cuisine:"Asian",area:"Karama",price:24,desc:"Soy-vinegar braised chicken with garlic rice. Filipino comfort."},
+{dish:"Halo-Halo",resto:"Tagpuan",cuisine:"Asian",area:"Karama",price:20,desc:"Shaved-ice rainbow with leche flan and ube. Dessert event."},
+{dish:"Chicken Katsu Curry",resto:"Tokyo Express",cuisine:"Asian",area:"Al Barsha",price:34,desc:"Crispy cutlet, glossy curry, sticky rice. Reliable as gravity."},
+
+// ---- Indian ----
+{dish:"Butter Chicken + 2 Naan",resto:"Ravi Restaurant",cuisine:"Indian",area:"Satwa",price:27,desc:"The Satwa legend. Plastic chairs, zero pretension, unbeatable gravy."},
+{dish:"Mutton Peshawari",resto:"Ravi Restaurant",cuisine:"Indian",area:"Satwa",price:30,desc:"The dish regulars actually order. Mop it with hot tandoori roti."},
+{dish:"Thali (veg, unlimited)",resto:"Saravanaa Bhavan",cuisine:"Indian",area:"Karama",price:24,desc:"A dozen little bowls, refilled until you surrender."},
+{dish:"Ghee Roast Dosa",resto:"Saravanaa Bhavan",cuisine:"Indian",area:"Karama",price:18,desc:"A golden crispy metre with three chutneys and sambar."},
+{dish:"Chicken Biryani (full)",resto:"Calicut Paragon",cuisine:"Indian",area:"Karama",price:29,desc:"Malabar-style with a boiled egg buried like treasure."},
+{dish:"Fish Mango Curry",resto:"Calicut Paragon",cuisine:"Indian",area:"Karama",price:35,desc:"Kerala kingfish in tangy raw-mango coconut curry."},
+{dish:"Mutton Biryani",resto:"Karachi Darbar",cuisine:"Indian",area:"Karama",price:26,desc:"Old-Dubai Pakistani staple since the 70s. Huge portions."},
+{dish:"Chicken Tikka (4 pc)",resto:"Karachi Darbar",cuisine:"Indian",area:"Bur Dubai",price:22,desc:"Charcoal tikka with mint chutney and onion rings."},
+{dish:"Nihari + Naan",resto:"Sind Punjab",cuisine:"Indian",area:"Bur Dubai",price:28,desc:"Slow-cooked beef shank stew from a Meena Bazaar veteran."},
+{dish:"Daal Fry + Tandoori Roti",resto:"Sind Punjab",cuisine:"Indian",area:"Bur Dubai",price:16,desc:"The cheapest deeply-satisfying dinner in Meena Bazaar."},
+{dish:"Chole Bhature",resto:"Puranmal",cuisine:"Indian",area:"Bur Dubai",price:20,desc:"Fluffy fried bread with spiced chickpeas. Sunday-morning chaos fuel."},
+{dish:"Pani Puri Round",resto:"Bikanervala",cuisine:"Indian",area:"Karama",price:14,desc:"Crackly shells, spicy water, instant joy. Order two rounds."},
+{dish:"Chettinad Chicken",resto:"Aappa Kadai",cuisine:"Indian",area:"Karama",price:32,desc:"Pepper-heavy Tamil curry with lacy appam to soak it up."},
+{dish:"Mysore Masala Dosa",resto:"Vasanta Bhavan",cuisine:"Indian",area:"Bur Dubai",price:17,desc:"Red-chutney-smeared dosa with potato masala."},
+{dish:"Beef Fry + Parotta",resto:"Calicut Notebook",cuisine:"Indian",area:"Al Rigga",price:30,desc:"Kerala-style dry beef with flaky layered parotta."},
+{dish:"Chicken 65 Plate",resto:"Hotel Saravana",cuisine:"Indian",area:"Deira",price:21,desc:"Fiery red fried chicken bites with curry leaves."},
+
+// ---- Street Food ----
+{dish:"Regag with Cheese & Honey",resto:"Karak House",cuisine:"Street Food",area:"City Walk",price:18,desc:"Paper-thin Emirati crepe + karak chai = Dubai late-night combo."},
+{dish:"Karak Chai + Chips Oman Regag",resto:"Filli Cafe",cuisine:"Street Food",area:"Al Nahda",price:12,desc:"The karak that built an empire, with the iconic crisps roll."},
+{dish:"Zafran Chai + Bun",resto:"Filli Cafe",cuisine:"Street Food",area:"Al Quoz",price:11,desc:"Saffron karak and a buttered bun. AED 11 of pure peace."},
+{dish:"Fish & Chips (catch of day)",resto:"Bu Qtair",cuisine:"Street Food",area:"Jumeirah",price:38,desc:"Fishing-shack icon by the beach. Point at a fish, wait, devour."},
+{dish:"Double Smash Burger",resto:"High Joint",cuisine:"Street Food",area:"Jumeirah",price:36,desc:"Cult smash burger from a drive-through window. Worth the queue."},
+{dish:"Salt Slider Duo",resto:"Salt",cuisine:"Street Food",area:"Jumeirah",price:35,desc:"The Kite Beach food-truck original. Wagyu sliders, sea breeze."},
+{dish:"Pickl Single + Fries",resto:"Pickl",cuisine:"Street Food",area:"JLT",price:39,desc:"Juicy smash patty, house pickles, crinkle fries. Modern classic."},
+{dish:"Shawarma Fries Box",resto:"Eat & Drink",cuisine:"Street Food",area:"Deira",price:23,desc:"Fries buried under shawarma, garlic sauce and pickles. No regrets."},
+{dish:"Chicken Shawarma x3",resto:"Eat & Drink",cuisine:"Street Food",area:"Satwa",price:15,desc:"Three classic sandwiches for the price of one fancy coffee."},
+{dish:"Logma Karak + Khameer",resto:"Logma",cuisine:"Street Food",area:"Jumeirah",price:25,desc:"Emirati khameer bread with cheese and date syrup, Boxpark style."},
+{dish:"Chapati + Cheese + Karak",resto:"Local Cafeteria",cuisine:"Street Food",area:"Satwa",price:9,desc:"AED 9 of nostalgia. The cheapest happiness on this list."},
+{dish:"Masala Chai + Bun Maska",resto:"Project Chaiwala",cuisine:"Street Food",area:"City Walk",price:19,desc:"Third-wave chai done with old-Bombay soul."},
+{dish:"Crispy Chicken Wrap",resto:"Wrap House Cafeteria",cuisine:"Street Food",area:"Al Nahda",price:14,desc:"Late-night cafeteria classic, extra crispy, extra sauce."},
+{dish:"Nutella Khameer",resto:"Karak House",cuisine:"Street Food",area:"Business Bay",price:17,desc:"Warm Emirati bread, molten chocolate. Post-dinner non-negotiable."}
+];
+DISHES.forEach((d,i)=>d.id=i);
+
+/* ---------- state ---------- */
+const cuisines = ["All", ...new Set(DISHES.map(d=>d.cuisine))];
+const areas = ["All", ...new Set(DISHES.map(d=>d.area))].sort((a,b)=>a==="All"?-1:b==="All"?1:a.localeCompare(b));
+let activeCuisine="All", activeArea="All", query="", showSavedOnly=false, spinning=false;
+
+let favs = new Set();
+try{ favs = new Set(JSON.parse(localStorage.getItem("u40favs")||"[]")); }catch(e){}
+function persistFavs(){ try{ localStorage.setItem("u40favs", JSON.stringify([...favs])); }catch(e){} }
+
+/* ---------- helpers ---------- */
+const $ = id => document.getElementById(id);
+const norm = s => s.toLowerCase().trim();
+
+function matchesQuery(d,q){
+  if(!q) return true;
+  return q.split(/\s+/).every(w => norm(d.dish).includes(w)||norm(d.resto).includes(w)||norm(d.area).includes(w));
+}
+function baseMatch(d,{cuisine=activeCuisine,area=activeArea,q=norm(query)}={}){
+  return (cuisine==="All"||d.cuisine===cuisine)&&(area==="All"||d.area===area)&&matchesQuery(d,q);
+}
+function filtered(){
+  return DISHES.filter(d=>baseMatch(d)&&(!showSavedOnly||favs.has(d.id)));
+}
+function countFor(opts){ return DISHES.filter(d=>baseMatch(d,opts)).length; }
+
+function mapsLink(d){ return "https://www.google.com/maps/search/"+encodeURIComponent(d.resto+" "+d.area+" Dubai"); }
+function providerLink(d,provider){
+  const key=provider.toLowerCase();
+  if(d.links&&d.links[key]) return {url:d.links[key],exact:true};
+  return {url:"https://www.google.com/search?q="+encodeURIComponent(d.resto+" "+d.area+" Dubai "+provider),exact:false};
+}
+
+function cardHTML(d,delay){
+  const meta=CUISINE_META[d.cuisine], img=IMAGES.cuisine[d.cuisine];
+  const mainOrder=providerLink(d,"Talabat");
+  const appPills=PROVIDERS.slice(1).map(p=>{
+    const l=providerLink(d,p);
+    return `<a class="${l.exact?'exact':''}" href="${l.url}" target="_blank" rel="noopener">${p}</a>`;
+  }).join("");
+  return `
+  <div class="dish-card" ${delay!=null?`style="--d:${delay}ms"`:''}>
+    <div class="card-img ${meta.grad}">
+      ${meta.emoji}
+      <img src="${img}" alt="" loading="lazy" onerror="this.remove()">
+      <button class="fav ${favs.has(d.id)?'on':''}" data-id="${d.id}" onclick="toggleFav(${d.id})" aria-label="Save to favorites"><svg class="ic"><use href="#i-heart"/></svg></button>
+    </div>
+    <div class="card-body">
+      <div class="top"><h3>${d.dish}</h3><span class="price-tag">AED ${d.price}</span></div>
+      <div class="resto">${d.resto}</div>
+      <div class="meta">${d.cuisine} · ${d.area}</div>
+      <p class="desc">${d.desc}</p>
+      <div class="links">
+        <a class="lnk-maps" href="${mapsLink(d)}" target="_blank" rel="noopener"><svg class="ic"><use href="#i-pin"/></svg> Maps</a>
+        <a class="lnk-order" href="${mainOrder.url}" target="_blank" rel="noopener"><svg class="ic"><use href="#i-bag"/></svg> Talabat${mainOrder.exact?' ✓':''}</a>
+      </div>
+      <div class="apps">${appPills}</div>
+    </div>
+  </div>`;
+}
+
+/* ---------- favorites ---------- */
+function toggleFav(id){
+  favs.has(id)?favs.delete(id):favs.add(id);
+  persistFavs();
+  document.querySelectorAll(`.fav[data-id="${id}"]`).forEach(b=>b.classList.toggle("on",favs.has(id)));
+  if(showSavedOnly) renderGrid();
+}
+
+/* ---------- animated counter ---------- */
+let countAnim;
+function animateCount(target){
+  const el=$("count");
+  const start=parseInt(el.dataset.v||"0",10);
+  cancelAnimationFrame(countAnim);
+  const t0=performance.now(), dur=350;
+  function step(t){
+    const p=Math.min((t-t0)/dur,1);
+    const v=Math.round(start+(target-start)*(1-Math.pow(1-p,3)));
+    el.textContent=v+" spots";
+    if(p<1) countAnim=requestAnimationFrame(step);
+    else el.dataset.v=target;
+  }
+  countAnim=requestAnimationFrame(step);
+}
+
+/* ---------- cuisine scroller (with live counts) ---------- */
+function renderCuisines(){
+  const el=$("cuisineScroller"); el.innerHTML="";
+  cuisines.forEach(c=>{
+    const meta=CUISINE_META[c];
+    const n=countFor({cuisine:c});
+    const b=document.createElement("button");
+    b.className="cuisine-tile";
+    b.setAttribute("aria-pressed",String(c===activeCuisine));
+    const imgTag=(c!=="All"&&IMAGES.cuisine[c])?`<img src="${IMAGES.cuisine[c]}" alt="" loading="lazy" onerror="this.remove()">`:"";
+    b.innerHTML=`<div class="ring ${meta.grad}">${meta.emoji}${imgTag}<span class="cnt">${n}</span></div><span class="lbl">${c}</span>`;
+    b.onclick=()=>{ activeCuisine=c; renderAll(); };
+    el.appendChild(b);
+  });
+}
+
+/* ---------- area chips (counts + disable empty) ---------- */
+function renderAreas(){
+  const el=$("areaChips"); el.innerHTML="";
+  areas.forEach(a=>{
+    const n=countFor({area:a});
+    const b=document.createElement("button");
+    b.className="chip";
+    b.innerHTML=(a==="All"?"All areas":a)+`<span class="c">${n}</span>`;
+    b.setAttribute("aria-pressed",String(a===activeArea));
+    if(n===0&&a!==activeArea) b.disabled=true;
+    b.onclick=()=>{ activeArea=a; renderAll(); };
+    el.appendChild(b);
+  });
+}
+
+/* ---------- browse grid (never a dead-end) ---------- */
+function renderGrid(){
+  const list=filtered();
+  animateCount(list.length);
+  const grid=$("grid");
+  if(list.length){
+    grid.innerHTML=list.map((d,i)=>cardHTML(d,Math.min(i,12)*40)).join("");
+    return;
+  }
+  // empty → suggest: same cuisine elsewhere, or relax filters
+  let nearby=[], label="";
+  if(activeArea!=="All"){
+    nearby=DISHES.filter(d=>baseMatch(d,{area:"All"})&&(!showSavedOnly||favs.has(d.id)));
+    label=`Nothing in <b>${activeArea}</b> for this combo — closest picks from other areas:`;
+  }
+  if(!nearby.length&&activeCuisine!=="All"){
+    nearby=DISHES.filter(d=>baseMatch(d,{area:"All",cuisine:"All"})&&(!showSavedOnly||favs.has(d.id)));
+    label=`No exact match — here's what we'd grab instead:`;
+  }
+  const altChips=areas.filter(a=>a!=="All"&&countFor({area:a})>0).slice(0,5)
+    .map(a=>`<button class="chip" onclick="setArea('${a}')">${a}<span class="c">${countFor({area:a})}</span></button>`).join("");
+  grid.innerHTML=`
+    <div class="empty">
+      <h4>${query?`No match for “${query}”`:"Nothing here yet"}</h4>
+      ${showSavedOnly?"You haven't saved anything matching this — tap the hearts!":"Try one of these areas instead:"}
+      <div class="alts">${altChips}<button class="chip" onclick="resetFilters()">Show everything</button></div>
+    </div>
+    ${nearby.length?`<div class="nearby-label">${label}</div>`+nearby.slice(0,3).map((d,i)=>cardHTML(d,i*60)).join(""):""}`;
+}
+function setArea(a){ activeArea=a; renderAll(); }
+function resetFilters(){ activeCuisine="All"; activeArea="All"; query=""; $("searchInput").value=""; $("searchWrap").classList.remove("has-text"); showSavedOnly=false; $("savedToggle").setAttribute("aria-pressed","false"); renderAll(); }
+
+/* ---------- spin (auto-widens, tells you) ---------- */
+function spin(){
+  const hint=$("spinHint");
+  let pool=DISHES.filter(d=>baseMatch(d));
+  let note="";
+  if(!pool.length&&activeArea!=="All"){ pool=DISHES.filter(d=>baseMatch(d,{area:"All"})); note="No match in "+activeArea+" — expanded to all areas"; }
+  if(!pool.length){ pool=DISHES.filter(d=>baseMatch(d,{area:"All",cuisine:"All",q:""})); note="Expanded to everything — pure luck mode"; }
+  hint.textContent=note||"Spins within your search + filters";
+  hint.classList.toggle("note",!!note);
+
+  const reel=$("reel"), btn=$("spinBtn");
+  if(spinning) return;
+  spinning=true; btn.disabled=true;
+  const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const finalPick=pool[Math.floor(Math.random()*pool.length)];
+  if(reduced||pool.length===1){
+    reel.className="reel landed"; reel.innerHTML=cardHTML(finalPick);
+    spinning=false; btn.disabled=false; return;
+  }
+  let ticks=0; const totalTicks=10+Math.floor(Math.random()*5);
+  reel.className="reel spinning";
+  (function tick(){
+    ticks++;
+    const d=(ticks<totalTicks)?pool[Math.floor(Math.random()*pool.length)]:finalPick;
+    reel.innerHTML=cardHTML(d);
+    if(ticks<totalTicks) setTimeout(tick,70+ticks*ticks*2.2);
+    else{ reel.className="reel landed"; spinning=false; btn.disabled=false; }
+  })();
+}
+
+/* ---------- render all ---------- */
+function renderAll(){ renderCuisines(); renderAreas(); renderGrid(); }
+
+/* ---------- init ---------- */
+$("heroImg").src=IMAGES.hero;
+document.querySelectorAll("[data-img]").forEach(img=>{ img.src=IMAGES[img.dataset.img]; });
+$("liveCount").textContent=DISHES.length+" dishes · "+new Set(DISHES.map(d=>d.resto)).size+" spots curated";
+renderAll();
+
+$("spinBtn").onclick=spin;
+$("navSpin").onclick=()=>{ $("spinZone").scrollIntoView({behavior:"smooth"}); spin(); };
+document.querySelectorAll(".nav-btn").forEach(b=>{
+  b.onclick=()=>{
+    $(b.dataset.target).scrollIntoView({behavior:"smooth"});
+    document.querySelectorAll(".nav-btn").forEach(x=>x.classList.toggle("active",x===b));
+  };
+});
+$("savedToggle").onclick=()=>{
+  showSavedOnly=!showSavedOnly;
+  $("savedToggle").setAttribute("aria-pressed",String(showSavedOnly));
+  renderGrid();
+};
+let searchTimer;
+$("searchInput").addEventListener("input",e=>{
+  clearTimeout(searchTimer);
+  searchTimer=setTimeout(()=>{
+    query=e.target.value;
+    $("searchWrap").classList.toggle("has-text",query.length>0);
+    renderAreas(); renderGrid();
+  },120);
+});
+$("searchClear").onclick=()=>{
+  query=""; $("searchInput").value="";
+  $("searchWrap").classList.remove("has-text");
+  renderAreas(); renderGrid(); $("searchInput").focus();
+};
+$("suggestLink").onclick=e=>{
+  e.preventDefault();
+  if(CONFIG.instagram) window.open(CONFIG.instagram,"_blank");
+  else alert("Set CONFIG.instagram at the top of the script to open your DM — or add finds directly to the DISHES array.");
+};
+</script>
+</body>
+</html>
